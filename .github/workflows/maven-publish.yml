@@ -48,7 +48,7 @@ jobs:
         run: echo "BUILD_PROFILE=production" >> $GITHUB_ENV
 
       - name: Publish to GitHub Packages Apache Maven
-        run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml -P"${BUILD_PROFILE}"
+        run: mvn deploy -P"${BUILD_PROFILE}"
         env:
           GITHUB_ACTOR: ${{ vars.ACTOR }}
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
