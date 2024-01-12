@@ -31,20 +31,24 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
-    - name: set environment variable for develop
-      if: github.ref == 'refs/heads/develop'
-      run: echo "BUILD_PROFILE=develop" >> $GITHUB_ENV
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: set environment variable for develop
+        if: github.ref == 'refs/heads/develop'
+        run: echo "BUILD_PROFILE=develop" >> $GITHUB_ENV
 
-    - name: set environment variable for staging
-      if: github.ref == 'refs/heads/staging'
-      run: echo "BUILD_PROFILE=staging" >> $GITHUB_ENV
+      - name: set environment variable for staging
+        if: github.ref == 'refs/heads/staging'
+        run: echo "BUILD_PROFILE=staging" >> $GITHUB_ENV
 
-    - name: set environment variable for production
-      if: github.ref == 'refs/heads/production'
-      run: echo "BUILD_PROFILE=production" >> $GITHUB_ENV
-    
-    - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml -P"${BUILD_PROFILE}"
-      env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      - name: set environment variable for production
+        if: github.ref == 'refs/heads/production'
+        run: echo "BUILD_PROFILE=production" >> $GITHUB_ENV
 
+      - name: Publish to GitHub Packages Apache Maven
+        run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml -P"${BUILD_PROFILE}"
+        env:
+          GITHUB_ACTOR: ${{ vars.ACTOR }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
