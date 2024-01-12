@@ -10,10 +10,11 @@
     </parent>
     <groupId>com.example</groupId>
     <artifactId>maven-deploy</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${project.version}</version>
     <name>maven-deploy</name>
     <description>maven-deploy</description>
     <properties>
+        <project.version>0.0.1-SNAPSHOT</project.version>
         <java.version>17</java.version>
     </properties>
     <dependencies>
@@ -57,7 +58,39 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <project.version>0.0.1-DEV-SNAPSHOT</project.version>
+                <project.version>DEV-0.0.3-SNAPSHOT</project.version>
+            </properties>
+            <repositories>
+                <repository>
+                    <id>central</id>
+                    <url>https://repo1.maven.org/maven2</url>
+                </repository>
+                <repository>
+                    <id>github</id>
+                    <url>https://maven.pkg.github.com/giangndj-hlg/maven-deploy</url>
+                </repository>
+            </repositories>
+        </profile>
+        <profile>
+            <id>staging</id>
+            <properties>
+                <project.version>STAGING-0.0.2-SNAPSHOT</project.version>
+            </properties>
+            <repositories>
+                <repository>
+                    <id>central</id>
+                    <url>https://repo1.maven.org/maven2</url>
+                </repository>
+                <repository>
+                    <id>github</id>
+                    <url>https://maven.pkg.github.com/giangndj-hlg/maven-deploy</url>
+                </repository>
+            </repositories>
+        </profile>
+        <profile>
+            <id>production</id>
+            <properties>
+                <project.version>PRODUCTION-0.0.1-SNAPSHOT</project.version>
             </properties>
             <repositories>
                 <repository>
