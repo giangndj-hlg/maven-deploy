@@ -49,7 +49,7 @@ jobs:
     - name: Set Variables
       id: set-env
       run: |
-        echo "BUILD_PROFILE=${{BUILD_PROFILE}}" >> "$GITHUB_OUTPUT"
+        echo "BUILD_PROFILE=${BUILD_PROFILE}" >> "$GITHUB_OUTPUT"
 
 
   deploy:
