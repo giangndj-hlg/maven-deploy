@@ -18,6 +18,9 @@ jobs:
       contents: read
       packages: write
 
+    outputs:
+      build_profile: ${{ steps.set-env.outputs.BUILD_PROFILE }}
+
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK
@@ -43,8 +46,20 @@ jobs:
       if: github.ref == 'refs/heads/production'
       run: echo "BUILD_PROFILE=production" >> $GITHUB_ENV
 
-    - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -P"${BUILD_PROFILE}" -s $GITHUB_WORKSPACE/settings.xml
-      env:
-        GITHUB_ACTOR: ${{ vars.ACTOR }}
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+    - name: Set Variables
+      id: set-env
+      run: |
+        echo "BUILD_PROFILE=${{BUILD_PROFILE}}" >> "$GITHUB_OUTPUT"
+
+
+  deploy:
+    needs: build
+    runs-on: [ubuntu-latest]
+    steps:
+      - env:
+        BUILD_PROFILE: ${{needs.build.outputs.build_profile}}
+      - name: Publish to GitHub Packages Apache Maven
+        run: mvn deploy -P"${BUILD_PROFILE}" -s $GITHUB_WORKSPACE/settings.xml
+        env:
+          GITHUB_ACTOR: ${{ vars.ACTOR }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
