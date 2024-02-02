@@ -56,6 +56,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - env:
-        BUILD_PROFILE: ${{needs.build.outputs.build_profile}}
-
+      - name: Publish to GitHub Packages Apache Maven
+        run: mvn deploy -P"${{needs.build.outputs.build_profile}}" -s $GITHUB_WORKSPACE/settings.xml
+        env:
+          GITHUB_ACTOR: ${{ vars.ACTOR }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
